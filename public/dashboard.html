@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Split App Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #f2f6fc;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    nav .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    nav .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    section {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, button {
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 1rem;
+    }
+
+    ul li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+     
+    .brand-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-section h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.dashboard-label {
+  font-size: 1rem;
+  color: #d0eaff;
+  font-weight: 500;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-section h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.dashboard-label {
+  font-size: 1rem;
+  color: #d0eaff;
+  font-weight: 500;
+}
+
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        margin-top: 0.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links a {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+    }
+    
+    /* Login modal styles */
+    #login-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    #login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    #login-box h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 Login Modal -->
+  <div id="login-modal">
+    <div id="login-box">
+      <h2>Login to SplitApp</h2>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔄 Main App -->
+<nav>
+  <div class="brand-section">
+    <h1>💸 SPLIT APP</h1>
+    <span class="dashboard-label">Dashboard</span>
+  </div>
+  <div class="nav-links">
+    <a href="#add">Add Expense</a>
+    <a href="#expenses">Expenses</a>
+    <a href="#balances">Balances</a>
+    <a href="#settlements">Settlements</a>
+    <a href="#" id="sign-out-btn">Sign Out</a>
+  </div>
+</nav>
+
+
+  <div class="container">
+
+    <section id="add">
+      <h2>Add Expense</h2>
+      <form id="expense-form">
+        <input type="text" id="payer" placeholder="Paid By (e.g., Alice)" required>
+        <input type="number" id="amount" placeholder="Amount" required>
+        <input type="text" id="participants" placeholder="Participants (comma separated)" required>
+        <input type="text" id="description" placeholder="Description (e.g., Lunch)">
+        <button type="submit">Add Expense</button>
+      </form>
+    </section>
+
+    <section id="expenses">
+      <h2>All Expenses</h2>
+      <ul id="expense-list"><li>Loading...</li></ul>
+    </section>
+
+    <section id="balances">
+      <h2>Current Balances</h2>
+      <button onclick="fetchBalances()">🔄 Refresh Balances</button>
+      <ul id="balance-list"><li>Loading...</li></ul>
+    </section>
+
+    <section id="settlements">
+      <h2>Settlement Suggestions</h2>
+      <button onclick="fetchSettlements()">💰 Calculate Settlements</button>
+      <ul id="settlement-list"><li>Loading...</li></ul>
+    </section>
+
+  </div>
+
+  <!-- 🧾 Load Expenses (with Delete + Edit Button) -->
+<script>
+  const API = 'http://localhost:5000/api';
+  const user = localStorage.getItem("user");
+
+  if (!user) {
+    document.getElementById("login-modal").style.display = "flex";
+  } else {
+    document.getElementById("login-modal").style.display = "none";
+    loadExpenses();
+    fetchBalances();
+    fetchSettlements();
+  }
+
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!username || !password) {
+      alert("Please enter both username and password.");
+      return;
+    }
+    localStorage.setItem("user", username);
+    alert(`Thanks for logging into the app, ${username}!`);
+    document.getElementById("login-modal").style.display = "none";
+    loadExpenses();
+    fetchBalances();
+    fetchSettlements();
+  });
+
+  document.getElementById('sign-out-btn').addEventListener('click', () => {
+    localStorage.removeItem("user");
+    location.reload();
+  });
+
+  // 🔁 ADD / UPDATE EXPENSE HANDLER
+  document.getElementById('expense-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payer = document.getElementById('payer').value.trim();
+    const amount = parseFloat(document.getElementById('amount').value);
+    const participantsRaw = document.getElementById('participants').value;
+    const description = document.getElementById('description').value.trim();
+    const participants = participantsRaw.split(',').map(p => p.trim()).filter(p => p !== '');
+
+    const id = document.getElementById('expense-form').dataset.editingId;
+    const url = id ? `${API}/expenses/${id}` : `${API}/expenses`;
+    const method = id ? 'PUT' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payer, amount, participants, description })
+      });
+
+      if (!res.ok) throw new Error(`${method === 'POST' ? 'Adding' : 'Updating'} expense failed`);
+
+      document.getElementById('expense-form').reset();
+      delete document.getElementById('expense-form').dataset.editingId;
+      document.querySelector('#expense-form button').textContent = "Add Expense";
+
+      loadExpenses();
+      fetchBalances();
+      fetchSettlements();
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  });
+
+  // 🔁 LOAD EXPENSES WITH EDIT/DELETE
+  async function loadExpenses() {
+    try {
+      const res = await fetch(`${API}/expenses`);
+      const response = await res.json();
+      const data = response.data;
+
+      const list = document.getElementById('expense-list');
+      list.innerHTML = '';
+
+      data.forEach(e => {
+        const payer = e.payer || '(Unknown)';
+        const item = document.createElement('li');
+
+        item.innerHTML = `
+          <strong>${payer}</strong> paid ₹${e.amount} for <em>${e.description || 'some expense'}</em> with ${e.participants.join(', ')}
+          <button style="margin-left:10px; background:red; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer;" onclick="deleteExpense('${e._id}')">🗑️</button>
+          <button style="margin-left:5px; background:#ffc107; color:black; border:none; padding:4px 8px; border-radius:5px; cursor:pointer;" onclick="editExpense('${e._id}', '${e.payer}', ${e.amount}, '${e.participants.join(', ')}', '${e.description || ''}')">✏️</button>
+        `;
+        list.appendChild(item);
+      });
+    } catch {
+      document.getElementById('expense-list').innerHTML = '<li>Error loading expenses</li>';
+    }
+  }
+
+  // 🔁 DELETE EXPENSE
+  async function deleteExpense(id) {
+    if (!confirm("Are you sure you want to delete this expense?")) return;
+
+    try {
+      const res = await fetch(`${API}/expenses/${id}`, { method: 'DELETE' });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || "Failed to delete");
+
+      alert(result.message || "Deleted");
+      loadExpenses();
+      fetchBalances();
+      fetchSettlements();
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  }
+
+  // 🔁 EDIT EXPENSE → Pre-fill form and update mode
+  function editExpense(id, payer, amount, participants, description) {
+    document.getElementById('payer').value = payer;
+    document.getElementById('amount').value = amount;
+    document.getElementById('participants').value = participants;
+    document.getElementById('description').value = description;
+    document.getElementById('expense-form').dataset.editingId = id;
+    document.querySelector('#expense-form button').textContent = "Update Expense";
+  }
+
+  // 📊 BALANCES
+  async function fetchBalances() {
+    try {
+      const res = await fetch(`${API}/settlements/balances`);
+      const data = await res.json();
+      const list = document.getElementById('balance-list');
+      list.innerHTML = '';
+      for (let person in data) {
+        const label = person === 'undefined' ? '(Unknown)' : person;
+        const item = document.createElement('li');
+        item.textContent = `${label}: ₹${data[person].toFixed(2)}`;
+        list.appendChild(item);
+      }
+    } catch {
+      document.getElementById('balance-list').innerHTML = '<li>Error loading balances</li>';
+    }
+  }
+
+  // 💰 SETTLEMENTS
+  async function fetchSettlements() {
+    try {
+      const res = await fetch(`${API}/settlements`);
+      const data = await res.json();
+      const list = document.getElementById('settlement-list');
+      list.innerHTML = '';
+      data.settlements.forEach(s => {
+        const item = document.createElement('li');
+        item.textContent = `${s.from} pays ₹${s.amount} to ${s.to}`;
+        list.appendChild(item);
+      });
+    } catch {
+      document.getElementById('settlement-list').innerHTML = '<li>Error loading settlements</li>';
+    }
+  }
+</script>
