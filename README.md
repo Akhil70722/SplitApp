@@ -160,14 +160,3 @@ MONGO_URI=your-mongodb-uri
 ```bash
 npm start
 ```
-
-## ✅ Submission Checklist
-
-- [x] Git repo with README
-- [x] Public deployment
-- [x] Public Postman collection
-- [x] Pre-populated data
-- [x] All required APIs implemented
-- [x] Sample error scenarios covered
-
----
