@@ -27,12 +27,14 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const settlementRoutes = require('./routes/settlementRoutes');
 const balanceRoutes = require('./routes/balanceRoutes');
 const userRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes'); // ✅ NEW route for categories
 
 // ===== API ROUTES =====
 app.use('/api/expenses', expenseRoutes);         // Add, view, update, delete expenses
 app.use('/api/settlements', settlementRoutes);   // Settlement logic
 app.use('/api/balances', balanceRoutes);         // Balance calculations
 app.use('/api/user', userRoutes);                // Login/Register
+app.use('/api/categories', categoryRoutes);      // ✅ Category CRUD operations
 
 // Root route serves dashboard
 app.get('/', (req, res) => {
